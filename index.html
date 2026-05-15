@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RC AUTOS | Milla de Oro — Medellín</title>
+  <meta name="description" content="RC AUTOS Medellín — Vehículos premium en El Poblado. Financiación, retomas y seguros." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────────────── */
+    :root {
+      --red:        #E31E24;
+      --red-light:  #ff3038;
+      --red-glow:   rgba(227, 30, 36, 0.22);
+      --gold:       #C8A84B;
+      --gold-dim:   rgba(200, 168, 75, 0.15);
+      --bg:         #070709;
+      --bg-2:       #0d0d12;
+      --bg-card:    #111117;
+      --bg-sim:     #08080c;
+      --border:     rgba(255,255,255,0.07);
+      --border-red: rgba(227,30,36,0.28);
+      --border-gold:rgba(200,168,75,0.28);
+      --text:       #eeeef2;
+      --muted:      #6a6a7e;
+      --ease:       cubic-bezier(.4, 0, .2, 1);
+    }
+
+    /* ─────────────────────────────────────────────────────
+       RESET & BASE
+    ───────────────────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 400;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* Typography helpers */
+    .t-tech  { font-family: 'Orbitron', sans-serif; letter-spacing: .05em; }
+    .t-red   { color: var(--red); }
+    .t-gold  { color: var(--gold); }
+    .t-muted { color: var(--muted); }
+
+    /* ─────────────────────────────────────────────────────
+       LOADER
+    ───────────────────────────────────────────────────── */
+    #loader {
+      position: fixed; inset: 0;
+      background: #000;
+      z-index: 9999;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px;
+      transition: opacity .55s var(--ease);
+    }
+    .ld-wordmark {
+      font-family: 'Orbitron'; font-weight: 900;
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      letter-spacing: .18em;
+    }
+    .ld-wordmark em { color: var(--red); font-style: normal; }
+    .ld-bar   { width: 180px; height: 2px; background: #1a1a22; border-radius: 2px; overflow: hidden; }
+    .ld-fill  { height: 100%; width: 0%; background: var(--red); transition: width 1.05s var(--ease); }
+    .ld-label { font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .35em; color: #2a2a38; }
+
+    /* ─────────────────────────────────────────────────────
+       FLOATING ELEMENTS
+    ───────────────────────────────────────────────────── */
+    /* WhatsApp */
+    .fab-wa {
+      position: fixed; bottom: 24px; right: 22px;
+      width: 56px; height: 56px;
+      background: #25D366; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; color: #fff;
+      z-index: 900;
+      box-shadow: 0 6px 22px rgba(37,211,102,.38);
+      text-decoration: none;
+      transition: transform .3s var(--ease);
+    }
+    .fab-wa:hover { transform: scale(1.12) rotate(8deg); }
+
+    /* Music pill */
+    .music-pill {
+      position: fixed; bottom: 94px; right: 22px; z-index: 900;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px;
+      background: rgba(10, 10, 16, .88);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      backdrop-filter: blur(14px);
+      cursor: pointer;
+      transition: all .3s var(--ease);
+    }
+    .music-pill:hover { background: var(--red); border-color: transparent; }
+    .music-pill button  { background: none; border: none; color: #fff; cursor: pointer; font-size: .95rem; line-height: 1; }
+    .music-pill .lbl    { font-family: 'Orbitron'; font-size: .52rem; letter-spacing: .14em; color: #fff; }
+
+    /* ─────────────────────────────────────────────────────
+       HEADER
+    ───────────────────────────────────────────────────── */
+    #hdr {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 26px 7%;
+      display: flex; align-items: center; justify-content: space-between;
+      z-index: 800;
+      transition: all .4s var(--ease);
+    }
+    #hdr.scrolled {
+      padding: 14px 7%;
+      background: rgba(7,7,9,.97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(18px);
+    }
+
+    /* Wordmark logo */
+    .wordmark {
+      font-family: 'Orbitron'; font-weight: 900;
+      font-size: 1.15rem; letter-spacing: .14em;
+      text-decoration: none; color: #fff;
+    }
+    .wordmark em { color: var(--red); font-style: normal; }
+
+    /* Nav */
+    .nav { display: flex; gap: 34px; }
+    .nav a {
+      color: rgba(255,255,255,.65);
+      text-decoration: none;
+      font-size: .67rem; font-weight: 700; letter-spacing: .2em;
+      position: relative;
+      transition: color .3s;
+    }
+    .nav a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0;
+      width: 0; height: 1.5px; background: var(--red);
+      transition: width .3s;
+    }
+    .nav a:hover { color: #fff; }
+    .nav a:hover::after { width: 100%; }
+
+    /* ─────────────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex; align-items: center;
+      padding: 120px 7% 80px;
+      overflow: hidden;
+    }
+
+    /* Grid background texture */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,.016) 80px),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,.016) 80px);
+      pointer-events: none;
+    }
+
+    .hero-bg-grad {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 60% 80% at 72% 50%, #1c0406 0%, var(--bg) 65%);
+    }
+
+    /* Instagram embed panel */
+    .hero-media {
+      position: absolute; right: 0; top: 0;
+      width: 60%; height: 100%;
+      z-index: 1; overflow: hidden;
+    }
+    .hero-media::before {
+      content: ''; position: absolute; inset: 0; z-index: 2;
+      background: linear-gradient(90deg, var(--bg) 0%, rgba(7,7,9,.5) 42%, transparent 100%);
+    }
+    .hero-media iframe {
+      width: 100%; height: 135%; border: none;
+      transform: translateY(-14%) scale(1.2);
+      filter: grayscale(.18) brightness(.62);
+      pointer-events: none;
+    }
+
+    /* Hero content */
+    .hero-content {
+      position: relative; z-index: 3;
+      max-width: 680px;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow-bar { width: 30px; height: 2px; background: var(--red); }
+    .hero-eyebrow span {
+      font-family: 'Orbitron'; font-size: .56rem; font-weight: 700;
+      letter-spacing: .28em; color: var(--gold);
+    }
+
+    .hero h1 {
+      font-family: 'Orbitron'; font-weight: 900;
+      font-size: clamp(2.3rem, 5.5vw, 4.5rem);
+      line-height: 1.05; text-transform: uppercase;
+      margin-bottom: 22px;
+    }
+    .hero h1 em { color: var(--red); font-style: normal; }
+
+    .hero-desc {
+      font-size: .97rem; color: var(--muted);
+      border-left: 3px solid var(--red); padding-left: 18px;
+      max-width: 480px; line-height: 1.85;
+      margin-bottom: 38px;
+    }
+
+    .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* ─────────────────────────────────────────────────────
+       BUTTONS
+    ───────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 15px 32px;
+      border-radius: 6px; border: none; cursor: pointer;
+      font-family: 'Orbitron'; font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+      text-decoration: none;
+      transition: all .3s var(--ease);
+      white-space: nowrap;
+    }
+    .btn-red   { background: var(--red); color: #fff; box-shadow: 0 4px 18px var(--red-glow); }
+    .btn-red:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 10px 26px rgba(227,30,36,.45); }
+    .btn-ghost { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.28); }
+    .btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,.05); }
+    .btn-block { width: 100%; }
+
+    /* ─────────────────────────────────────────────────────
+       SECTION SKELETON
+    ───────────────────────────────────────────────────── */
+    section { padding: 110px 7%; }
+    .sec-head { text-align: center; margin-bottom: 64px; }
+    .sec-head h2 {
+      font-family: 'Orbitron'; font-weight: 900;
+      font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+      text-transform: uppercase; margin-bottom: 14px;
+    }
+    .sec-head h2 em { color: var(--red); font-style: normal; }
+    .sec-rule  { width: 50px; height: 3px; background: var(--red); margin: 0 auto; }
+    .sec-sub   { margin-top: 14px; color: var(--muted); font-size: .92rem; }
+
+    /* ─────────────────────────────────────────────────────
+       SERVICES
+    ───────────────────────────────────────────────────── */
+    .svc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(225px, 1fr));
+      gap: 20px;
+    }
+
+    .svc-card {
+      padding: 40px 30px; text-align: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      transition: all .35s var(--ease);
+      position: relative; overflow: hidden;
+    }
+    .svc-card::after {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      background: linear-gradient(140deg, rgba(227,30,36,.08) 0%, transparent 55%);
+      transition: opacity .35s;
+    }
+    .svc-card:hover { border-color: var(--border-red); transform: translateY(-8px); }
+    .svc-card:hover::after { opacity: 1; }
+
+    .svc-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: rgba(227,30,36,.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.35rem; color: var(--red);
+      margin: 0 auto 20px;
+    }
+    .svc-card h3 { font-family: 'Orbitron'; font-size: .78rem; margin-bottom: 12px; }
+    .svc-card p  { color: var(--muted); font-size: .87rem; line-height: 1.72; }
+
+    /* ─────────────────────────────────────────────────────
+       INVENTORY
+    ───────────────────────────────────────────────────── */
+    #inventory { background: var(--bg-2); }
+
+    .inv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 32px;
+    }
+
+    /* ── CAR CARD ── */
+    .car-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,.5);
+      transition: all .4s var(--ease);
+    }
+    .car-card:hover {
+      border-color: var(--border-red);
+      box-shadow: 0 22px 55px rgba(0,0,0,.65), 0 0 0 1px var(--border-red);
+      transform: translateY(-4px);
+    }
+
+    /* Photo */
+    .car-photo { height: 240px; overflow: hidden; position: relative; }
+    .car-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .75s var(--ease);
+    }
+    .car-card:hover .car-photo img { transform: scale(1.08); }
+    .car-badge {
+      position: absolute; top: 14px; left: 14px;
+      font-family: 'Orbitron'; font-size: .46rem; font-weight: 700; letter-spacing: .12em;
+      background: var(--red); color: #fff;
+      padding: 5px 11px; border-radius: 4px;
+    }
+
+    /* Body */
+    .car-body { padding: 24px 24px 28px; }
+    .car-name {
+      font-family: 'Orbitron'; font-size: .77rem; font-weight: 700;
+      line-height: 1.45; margin-bottom: 6px;
+    }
+    .car-total-price {
+      font-family: 'Orbitron'; font-size: 1.7rem; font-weight: 900;
+      color: var(--red); line-height: 1; margin-bottom: 20px;
+    }
+    .car-total-price sup { font-size: .7rem; vertical-align: super; }
+
+    /* ── SIMULATOR ── */
+    .sim {
+      background: var(--bg-sim);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    /* Slider row */
+    .sim-row { margin-bottom: 14px; }
+    .sim-row:last-of-type { margin-bottom: 0; }
+
+    .sim-head {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 8px;
+    }
+    .sim-label {
+      font-family: 'Orbitron'; font-size: .54rem; font-weight: 700;
+      letter-spacing: .1em; color: var(--muted); text-transform: uppercase;
+    }
+    .sim-val {
+      font-family: 'Orbitron'; font-size: .68rem; font-weight: 700; color: #fff;
+    }
+    .sim-val .pct { font-size: .54rem; color: var(--muted); margin-left: 3px; }
+
+    /* Range input — oversized thumb for mobile */
+    input[type="range"] {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 5px;
+      border-radius: 5px; outline: none; cursor: pointer;
+      background: linear-gradient(
+        to right,
+        var(--red) 0%,
+        var(--red) var(--progress, 0%),
+        #242430 var(--progress, 0%)
+      );
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #fff; border: 3px solid var(--red);
+      box-shadow: 0 2px 8px rgba(0,0,0,.5);
+      cursor: pointer; transition: transform .18s;
+    }
+    input[type="range"]:active::-webkit-slider-thumb { transform: scale(1.3); }
+    input[type="range"]::-moz-range-thumb {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: #fff; border: 3px solid var(--red); cursor: pointer;
+    }
+
+    /* Divider */
+    .sim-divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+    /* Summary rows */
+    .sim-summary-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 5px 0;
+    }
+    .sim-summary-lbl { font-size: .72rem; color: var(--muted); }
+    .sim-summary-val { font-family: 'Orbitron'; font-size: .75rem; color: #ccc; }
+
+    /* Result blocks */
+    .sim-block {
+      border-radius: 10px; padding: 14px 16px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 10px;
+    }
+    .sim-block.primary {
+      background: rgba(227,30,36,.07);
+      border: 1px solid var(--border-red);
+    }
+    .sim-block.total {
+      background: var(--gold-dim);
+      border: 1px solid var(--border-gold);
+    }
+    .sim-block-lbl { font-size: .68rem; color: var(--muted); line-height: 1.55; }
+    .sim-block-lbl strong { display: block; font-size: .58rem; font-weight: 600; }
+    .sim-block-num { text-align: right; }
+    .sim-block-num span {
+      display: block;
+      font-family: 'Orbitron'; font-size: 1.25rem; font-weight: 700;
+    }
+    .sim-block-num small { font-size: .5rem; color: var(--muted); }
+    .sim-block.primary .sim-block-num span { color: var(--red); }
+    .sim-block.total   .sim-block-num span { color: var(--gold); }
+
+    /* Insurance row */
+    .sim-insurance {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 9px 0 2px;
+    }
+    .sim-insurance-lbl { font-size: .7rem; color: var(--muted); }
+    .sim-insurance-val { font-family: 'Orbitron'; font-size: .74rem; color: var(--gold); }
+
+    /* Legal */
+    .sim-legal {
+      font-size: .55rem; color: #2c2c3a;
+      line-height: 1.65; text-align: center;
+      margin-top: 13px;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       LOCATION
+    ───────────────────────────────────────────────────── */
+    .loc-wrap {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 48px; align-items: center;
+    }
+    .loc-map {
+      height: 460px; border-radius: 16px;
+      overflow: hidden; border: 1px solid var(--border);
+    }
+    .loc-map iframe { width: 100%; height: 100%; border: 0; display: block; }
+
+    .loc-info h3 { font-family: 'Orbitron'; font-size: .9rem; color: var(--gold); margin-bottom: 22px; }
+    .loc-block  { margin-bottom: 20px; }
+    .loc-block strong {
+      font-family: 'Orbitron'; font-size: .56rem; letter-spacing: .15em;
+      color: var(--red); display: block; margin-bottom: 6px;
+    }
+    .loc-block p { color: var(--muted); font-size: .9rem; line-height: 1.75; }
+
+    /* ─────────────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────────────── */
+    footer {
+      padding: 80px 7% 36px;
+      background: #030305;
+      border-top: 1px solid var(--border);
+    }
+    .ft-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr;
+      gap: 40px; margin-bottom: 56px;
+    }
+    .ft-brand p { color: var(--muted); font-size: .87rem; line-height: 1.8; margin-top: 16px; }
+    .ft-col h4  {
+      font-family: 'Orbitron'; font-size: .6rem;
+      letter-spacing: .18em; color: var(--red); margin-bottom: 20px;
+    }
+    .ft-col ul  { list-style: none; }
+    .ft-col li  { margin-bottom: 10px; }
+    .ft-col a   { color: var(--muted); text-decoration: none; font-size: .87rem; transition: color .3s; }
+    .ft-col a:hover { color: #fff; }
+    .ft-social  { display: flex; gap: 16px; font-size: 1.3rem; }
+    .ft-social a { color: var(--muted); transition: color .3s; }
+    .ft-social a:hover { color: #fff; }
+    .ft-email   { margin-top: 20px; font-size: .8rem; color: var(--muted); }
+    .ft-copy {
+      border-top: 1px solid var(--border); padding-top: 24px;
+      text-align: center; color: #252530;
+      font-family: 'Orbitron'; font-size: .5rem; letter-spacing: .18em;
+    }
+
+    /* ─────────────────────────────────────────────────────
+       RESPONSIVE — MOBILE FIRST
+    ───────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .loc-wrap  { grid-template-columns: 1fr; }
+      .loc-map   { height: 360px; }
+      .ft-grid   { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      section  { padding: 80px 5%; }
+      #hdr     { padding: 20px 5%; }
+      #hdr.scrolled { padding: 12px 5%; }
+      .nav     { display: none; }
+
+      /* Hero: stack content at bottom, media full bleed behind */
+      .hero { padding: 110px 5% 56px; align-items: flex-end; }
+      .hero-media { width: 100%; opacity: .28; }
+      .hero h1    { font-size: clamp(2rem, 8vw, 2.6rem); }
+      .hero-desc  { font-size: .9rem; }
+      .hero-btns  { flex-direction: column; }
+      .hero-btns .btn { width: 100%; }
+
+      /* Cards single column, nearly full-width */
+      .inv-grid { grid-template-columns: 1fr; gap: 26px; }
+      .car-photo { height: 220px; }
+      .car-body  { padding: 20px 18px 24px; }
+      .car-total-price { font-size: 1.5rem; }
+
+      /* Simulator tweaks */
+      .sim { padding: 16px 14px; }
+      input[type="range"]::-webkit-slider-thumb { width: 28px; height: 28px; }
+      .sim-block-num span { font-size: 1.1rem; }
+
+      /* Footer */
+      .ft-grid { grid-template-columns: 1fr; gap: 30px; }
+
+      /* FABs */
+      .fab-wa      { width: 52px; height: 52px; font-size: 24px; bottom: 20px; right: 18px; }
+      .music-pill  { bottom: 86px; right: 18px; }
+    }
+
+    @media (max-width: 430px) {
+      .hero h1 { font-size: 1.95rem; }
+      .svc-grid { grid-template-columns: 1fr; }
+
+      /* Slightly bigger thumb on small phones */
+      input[type="range"]::-webkit-slider-thumb { width: 30px; height: 30px; }
+      input[type="range"] { height: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─────────────────────────────────────────────────────
+     AUDIO
+───────────────────────────────────────────────────── -->
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ─────────────────────────────────────────────────────
+     LOADER
+───────────────────────────────────────────────────── -->
+<div id="loader">
+  <div class="ld-wordmark t-tech">RC<em>.</em>AUTOS</div>
+  <div class="ld-bar"><div class="ld-fill" id="ldFill"></div></div>
+  <p class="ld-label">CARGANDO EXPERIENCIA</p>
+</div>
+
+<!-- ─────────────────────────────────────────────────────
+     FLOATING — WhatsApp & Music
+───────────────────────────────────────────────────── -->
+<a href="https://wa.me/573043741941" class="fab-wa" target="_blank" aria-label="WhatsApp">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<div class="music-pill" id="musicPill" onclick="toggleMusic()">
+  <button id="musicBtn" aria-label="Reproducir música"><i class="fas fa-play"></i></button>
+  <span class="lbl" id="musicLbl">ATMOSPHERE</span>
+</div>
+
+<!-- ─────────────────────────────────────────────────────
+     HEADER
+───────────────────────────────────────────────────── -->
+<header id="hdr">
+  <a href="#home" class="wordmark t-tech">RC<em>.</em>AUTOS</a>
+  <nav class="nav">
+    <a href="#home">INICIO</a>
+    <a href="#inventory">INVENTARIO</a>
+    <a href="#services">SERVICIOS</a>
+    <a href="#location">UBICACIÓN</a>
+  </nav>
+</header>
+
+<!-- ─────────────────────────────────────────────────────
+     HERO
+───────────────────────────────────────────────────── -->
+<section class="hero" id="home">
+  <div class="hero-bg-grad"></div>
+  <div class="hero-media">
+    <iframe src="https://www.instagram.com/p/DWIQwbEjEyR/embed/" scrolling="no" loading="lazy" title="RC Autos Instagram"></iframe>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-bar"></div>
+      <span>MILLA DE ORO &nbsp;·&nbsp; MEDELLÍN</span>
+    </div>
+    <h1>MÁS QUE AUTOS,<br><em>ESTILO</em> DE VIDA</h1>
+    <p class="hero-desc">
+      En RC AUTOS redefinimos la experiencia de compra de vehículos premium.<br>
+      Transparencia absoluta y exclusividad en cada detalle.
+    </p>
+    <div class="hero-btns">
+      <a href="#inventory" class="btn btn-red">VER INVENTARIO</a>
+      <a href="https://wa.me/573043741941" class="btn btn-ghost" target="_blank">CONTACTAR ASESOR</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────
+     SERVICIOS
+───────────────────────────────────────────────────── -->
+<section id="services">
+  <div class="sec-head">
+    <h2>NUESTROS <em>SERVICIOS</em></h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="svc-grid">
+    <div class="svc-card">
+      <div class="svc-icon"><i class="fas fa-hand-holding-usd"></i></div>
+      <h3>FINANCIACIÓN</h3>
+      <p>Simulación inmediata y aprobación en tiempo récord con aliados bancarios de primer nivel.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><i class="fas fa-exchange-alt"></i></div>
+      <h3>RETOMAS</h3>
+      <p>Valoramos tu vehículo como parte de pago con el mejor precio del mercado garantizado.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><i class="fas fa-shield-alt"></i></div>
+      <h3>SEGUROS</h3>
+      <p>Protección total con pólizas a medida y respaldo de aseguradoras de clase mundial.</p>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><i class="fas fa-certificate"></i></div>
+      <h3>PERITAJE</h3>
+      <p>Todos nuestros vehículos cuentan con certificación técnica y legal completa y verificable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────
+     INVENTARIO
+───────────────────────────────────────────────────── -->
+<section id="inventory">
+  <div class="sec-head">
+    <h2>STOCK <em>PREMIUM</em></h2>
+    <div class="sec-rule"></div>
+    <p class="sec-sub">Selección exclusiva disponible para entrega inmediata</p>
+  </div>
+  <div class="inv-grid" id="carGrid"></div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────
+     UBICACIÓN
+───────────────────────────────────────────────────── -->
+<section id="location">
+  <div class="sec-head">
+    <h2>DÓNDE <em>ESTAMOS</em></h2>
+    <div class="sec-rule"></div>
+  </div>
+  <div class="loc-wrap">
+    <div class="loc-map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.3364!2d-75.5693635!3d6.2006322!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e44282eb5e2637b%3A0x633513a968962657!2sCra.%2043A%20%231sur-100%2C%20El%20Poblado%2C%20Medell%C3%ADn%2C%20Antioquia!5e0!3m2!1ses!2sco!4v1714357200000!5m2!1ses!2sco"
+        allowfullscreen loading="lazy" title="Mapa RC Autos"></iframe>
+    </div>
+    <div class="loc-info">
+      <h3>VISÍTANOS EN EL POBLADO</h3>
+      <div class="loc-block">
+        <strong>DIRECCIÓN</strong>
+        <p>Edificio Sudameris<br>Cra. 43A #1 SUR-100, El Poblado</p>
+      </div>
+      <div class="loc-block">
+        <strong>HORARIOS</strong>
+        <p>Lunes a Viernes: 8:00 AM – 6:00 PM<br>Sábados: 9:00 AM – 2:00 PM</p>
+      </div>
+      <div class="loc-block">
+        <strong>CONTACTO</strong>
+        <p>comercial@rcautosmedellin.com<br>+57 304 374 1941</p>
+      </div>
+      <a href="https://maps.app.goo.gl/9P7v7U1uX" target="_blank" class="btn btn-red btn-block" style="margin-top:8px">
+        <i class="fas fa-map-marker-alt"></i>&nbsp;CÓMO LLEGAR
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────
+     FOOTER
+───────────────────────────────────────────────────── -->
+<footer>
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <span class="wordmark t-tech" style="font-size:1.2rem">RC<em style="color:var(--red)">.</em>AUTOS</span>
+      <p>Referentes en la comercialización de vehículos de lujo y alta gama en Antioquia. Exclusividad, confianza y transparencia.</p>
+    </div>
+    <div class="ft-col">
+      <h4>MENÚ</h4>
+      <ul>
+        <li><a href="#home">Inicio</a></li>
+        <li><a href="#inventory">Inventario</a></li>
+        <li><a href="#services">Servicios</a></li>
+        <li><a href="#location">Ubicación</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h4>LEGAL</h4>
+      <ul>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Términos</a></li>
+        <li><a href="#">Cookies</a></li>
+      </ul>
+    </div>
+    <div class="ft-col">
+      <h4>SÍGUENOS</h4>
+      <div class="ft-social">
+        <a href="https://www.instagram.com/rcautos__/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </div>
+      <p class="ft-email">comercial@rcautosmedellin.com</p>
+    </div>
+  </div>
+  <div class="ft-copy">© 2026 RC AUTOS — TODOS LOS DERECHOS RESERVADOS</div>
+</footer>
+
+<!-- ─────────────────────────────────────────────────────
+     JAVASCRIPT
+───────────────────────────────────────────────────── -->
+<script>
+'use strict';
+
+/* ══════════════════════════════════════════════════════
+   CONFIGURACIÓN FINANCIERA
+   Edita estos valores si cambian las condiciones.
+══════════════════════════════════════════════════════ */
+const CFG = {
+  tasaMes:    0.0153,   // 20% E.A. ≈ 1.53% mensual
+  seguroPct:  0.00038,  // ~0.038% mensual del precio (≈ 4.56% anual, referencia)
+  plazoInit:  48        // plazo inicial por defecto (meses)
+};
+
+/* ══════════════════════════════════════════════════════
+   ARRAY DE VEHÍCULOS
+   Para añadir un carro: agrega un objeto {} al array.
+   Campos: id (único), name, price (COP), badge, img (URL)
+══════════════════════════════════════════════════════ */
+const CARS = [
+  {
+    id:    1,
+    name:  'Toyota Land Cruiser Prado LC 150',
+    price: 282_900_000,
+    badge: 'DISPONIBLE',
+    img:   'https://http2.mlstatic.com/D_NQ_NP_2X_608536-MCO110041825350_042026-F.webp'
+  },
+  {
+    id:    2,
+    name:  'BMW X6 xDrive40i M Sport',
+    price: 420_000_000,
+    badge: 'OFERTA',
+    img:   'https://http2.mlstatic.com/D_NQ_NP_2X_811200-MCO110389821643_042026-F.webp'
+  },
+  {
+    id:    3,
+    name:  'Toyota Hilux 4.0 V6 4×4',
+    price: 228_000_000,
+    badge: 'DISPONIBLE',
+    img:   'https://http2.mlstatic.com/D_NQ_NP_2X_626906-MCO110993950051_042026-F.webp'
+  },
+  {
+    id:    4,
+    name:  'Renault Scénic 1.6 Sportway',
+    price:  22_900_000,
+    badge: 'NUEVO PRECIO',
+    img:   'https://http2.mlstatic.com/D_NQ_NP_2X_683162-MCO110757437507_042026-F.webp'
+  }
+  // { id: 5, name: '...', price: 0, badge: '...', img: '...' }
+];
+
+/* ══════════════════════════════════════════════════════
+   HELPERS
+══════════════════════════════════════════════════════ */
+const fmt  = n => Math.round(n).toLocaleString('es-CO');
+const cop  = n => '$ ' + fmt(n);
+
+/* Cuota mensual (sistema francés) sobre el saldo financiado */
+function cuotaMensual(saldo, meses) {
+  if (saldo <= 0 || meses <= 0) return 0;
+  const r = CFG.tasaMes;
+  return saldo * (r * Math.pow(1 + r, meses)) / (Math.pow(1 + r, meses) - 1);
+}
+
+/* Seguro mensual estimado */
+const seguroMensual = precio => precio * CFG.seguroPct;
+
+/* ══════════════════════════════════════════════════════
+   STATE — un objeto por tarjeta
+══════════════════════════════════════════════════════ */
+const state = {};   // state[id] = { pct: 0–80, months: 12–72 }
+
+/* ── Referencia rápida a un elemento por id semántico ── */
+const el = (key, id) => document.getElementById(`${key}-${id}`);
+
+/* ── Actualiza todos los valores de una tarjeta ── */
+function sync(id) {
+  const car    = CARS.find(c => c.id === id);
+  const s      = state[id];
+
+  const ini    = car.price * (s.pct / 100);
+  const saldo  = car.price - ini;
+  const cuota  = cuotaMensual(saldo, s.months);
+  const seguro = seguroMensual(car.price);
+  const total  = cuota + seguro;
+
+  /* Labels */
+  el('v-ini', id).innerHTML  = `${cop(ini)}<span class="pct"> ${s.pct}%</span>`;
+  el('v-pla', id).textContent = `${s.months} meses`;
+  el('v-sal', id).textContent = cop(saldo);
+  el('v-cap', id).textContent = cop(cuota);
+  el('v-seg', id).textContent = cop(seguro);
+  el('v-tot', id).textContent = cop(total);
+
+  /* Slider track fill via CSS custom property */
+  const pIni = ((s.pct    - 0)  / 80)     * 100;
+  const pPla = ((s.months - 12) / (72-12)) * 100;
+  el('r-ini', id).style.setProperty('--progress', pIni.toFixed(1) + '%');
+  el('r-pla', id).style.setProperty('--progress', pPla.toFixed(1) + '%');
+
+  /* WhatsApp deep-link con contexto */
+  el('wa', id).href =
+    `https://wa.me/573043741941?text=` +
+    encodeURIComponent(
+      `Hola, me interesa el *${car.name}*.\n` +
+      `Cuota inicial: ${cop(ini)} (${s.pct}%)\n` +
+      `Plazo: ${s.months} meses\n` +
+      `Cuota estimada: ${cop(cuota)}/mes`
+    );
+}
+
+/* ══════════════════════════════════════════════════════
+   RENDER INVENTARIO
+══════════════════════════════════════════════════════ */
+function renderInventory() {
+  const grid = document.getElementById('carGrid');
+
+  CARS.forEach(car => {
+    /* Inicializar estado */
+    state[car.id] = { pct: 0, months: CFG.plazoInit };
+
+    const div = document.createElement('div');
+    div.className = 'car-card';
+
+    const iniPla = ((CFG.plazoInit - 12) / 60 * 100).toFixed(1);
+
+    div.innerHTML = /* html */`
+      <div class="car-photo">
+        <img src="${car.img}" alt="${car.name}" loading="lazy">
+        <span class="car-badge">${car.badge}</span>
+      </div>
+
+      <div class="car-body">
+        <p class="car-name t-tech">${car.name}</p>
+        <p class="car-total-price t-tech"><sup>COP </sup>${fmt(car.price)}</p>
+
+        <div class="sim">
+
+          <!-- ① CUOTA INICIAL -->
+          <div class="sim-row">
+            <div class="sim-head">
+              <span class="sim-label">Cuota Inicial</span>
+              <span class="sim-val" id="v-ini-${car.id}">$ 0 <span class="pct">0%</span></span>
+            </div>
+            <input type="range"
+              id="r-ini-${car.id}"
+              min="0" max="80" step="1" value="0"
+              style="--progress:0%"
+              aria-label="Porcentaje de cuota inicial"
+              oninput="state[${car.id}].pct = +this.value; sync(${car.id})">
+          </div>
+
+          <!-- ② PLAZO -->
+          <div class="sim-row">
+            <div class="sim-head">
+              <span class="sim-label">Plazo</span>
+              <span class="sim-val" id="v-pla-${car.id}">${CFG.plazoInit} meses</span>
+            </div>
+            <input type="range"
+              id="r-pla-${car.id}"
+              min="12" max="72" step="12" value="${CFG.plazoInit}"
+              style="--progress:${iniPla}%"
+              aria-label="Plazo en meses"
+              oninput="state[${car.id}].months = +this.value; sync(${car.id})">
+          </div>
+
+          <div class="sim-divider"></div>
+
+          <!-- ③ SALDO FINANCIADO -->
+          <div class="sim-summary-row">
+            <span class="sim-summary-lbl">Saldo a financiar</span>
+            <span class="sim-summary-val" id="v-sal-${car.id}"></span>
+          </div>
+
+          <!-- ④ CUOTA CAPITAL + INTERESES -->
+          <div class="sim-block primary">
+            <div class="sim-block-lbl">
+              CUOTA MENSUAL
+              <strong>capital + intereses</strong>
+            </div>
+            <div class="sim-block-num">
+              <span id="v-cap-${car.id}"></span>
+              <small>/ mes</small>
+            </div>
+          </div>
+
+          <!-- ⑤ SEGURO ESTIMADO -->
+          <div class="sim-insurance">
+            <span class="sim-insurance-lbl">+ Seguro estimado mensual</span>
+            <span class="sim-insurance-val" id="v-seg-${car.id}"></span>
+          </div>
+
+          <!-- ⑥ TOTAL -->
+          <div class="sim-block total">
+            <div class="sim-block-lbl">
+              CUOTA TOTAL ESTIMADA
+              <strong>crédito + seguro</strong>
+            </div>
+            <div class="sim-block-num">
+              <span id="v-tot-${car.id}"></span>
+              <small>/ mes</small>
+            </div>
+          </div>
+
+          <!-- TEXTO LEGAL -->
+          <p class="sim-legal">
+            Tasa de interés calculada con 20% E.A. Puede variar según perfil crediticio. Uso informativo.<br>
+            Seguro calculado como referencia (~0.038% mensual del valor del vehículo).
+          </p>
+
+        </div><!-- /sim -->
+
+        <a href="#" id="wa-${car.id}" target="_blank" class="btn btn-red btn-block">
+          <i class="fab fa-whatsapp"></i>&nbsp;SOLICITAR CRÉDITO
+        </a>
+      </div><!-- /car-body -->
+    `;
+
+    grid.appendChild(div);
+    sync(car.id); /* Valores iniciales */
+  });
+}
+
+/* ══════════════════════════════════════════════════════
+   INIT — loader, header scroll
+══════════════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  renderInventory();
+
+  /* Loader */
+  const fill = document.getElementById('ldFill');
+  fill.style.width = '100%';
+  setTimeout(() => {
+    const loader = document.getElementById('loader');
+    loader.style.opacity = '0';
+    setTimeout(() => loader.style.display = 'none', 580);
+  }, 1150);
+});
+
+window.addEventListener('scroll', () => {
+  document.getElementById('hdr').classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+/* ══════════════════════════════════════════════════════
+   MÚSICA
+══════════════════════════════════════════════════════ */
+const audio     = document.getElementById('bgMusic');
+const musicBtn  = document.getElementById('musicBtn');
+const musicLbl  = document.getElementById('musicLbl');
+let   playing   = false;
+
+function toggleMusic() {
+  if (!playing) {
+    audio.play()
+      .then(() => {
+        playing = true;
+        musicBtn.innerHTML  = '<i class="fas fa-pause"></i>';
+        musicLbl.textContent = 'PAUSE';
+      })
+      .catch(() => {/* autoplay bloqueado por el navegador */});
+  } else {
+    audio.pause();
+    playing = false;
+    musicBtn.innerHTML  = '<i class="fas fa-play"></i>';
+    musicLbl.textContent = 'ATMOSPHERE';
+  }
+}
+</script>
+</body>
+</html>
